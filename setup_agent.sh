@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # setup_agent.sh
 # Automated setup script for Awesome ChatGPT Prompts (prompts.chat)
@@ -21,11 +22,11 @@ fi
 REPO_DIR="awesome-chatgpt-prompts"
 if [ -d "$REPO_DIR" ]; then
     echo "📂 Agent: Directory '$REPO_DIR' already exists. Entering directory..."
-    cd "$REPO_DIR"
+    cd "$REPO_DIR" || { echo "❌ Failed to enter directory"; exit 1; }
 else
     echo "📥 Agent: Cloning repository..."
-    git clone https://github.com/f/awesome-chatgpt-prompts.git "$REPO_DIR"
-    cd "$REPO_DIR"
+    git clone https://github.com/f/awesome-chatgpt-prompts.git "$REPO_DIR" || { echo "❌ Failed to clone repository"; exit 1; }
+    cd "$REPO_DIR" || { echo "❌ Failed to enter directory"; exit 1; }
 fi
 
 # 3. Setup Environment Variables
@@ -44,10 +45,10 @@ fi
 
 # 4. Install Dependencies
 echo "📦 Agent: Installing dependencies (this may take a minute)..."
-npm install
+npm install || { echo "❌ Failed to install dependencies"; exit 1; }
 
 # 5. Run the Interactive Setup Wizard
 echo "🚀 Agent: Launching the project setup wizard..."
 echo "👉 Follow the on-screen instructions below:"
 echo "---------------------------------------------------"
-npm run setup
+npm run setup || { echo "❌ Setup wizard failed"; exit 1; }
